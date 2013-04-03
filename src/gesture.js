@@ -24,9 +24,9 @@
 
 	var handlers = {};
 
-	function Recorder() {
+	function Recorder(merge) {
 		this._points = null;
-		this._merge = 20;
+		this._merge = merge || 20;
 		this._context = null;
 		this._recordPointHandler = this._recordPoint();
 	}
@@ -69,22 +69,28 @@
 		},
 
 		gesture: function (p) {
-			var i, lim, cd, ld = null, p1, p2, gesture = '';
-			for (i = 1, lim = p.length; i < lim; i++) {
+			var i = 1,
+				lim = p.length,
+				cd, // current direction
+				ld = null, // last direction
+				p1, p2,
+				gesture = [];
+			while (i < lim) {
 				p1 = p[i - 1];
 				p2 = p[i];
 				cd = this._dir(p1, p2);
 				if (cd !== ld) {
 					ld = cd;
-					gesture += DIR[cd];				
+					gesture.push(DIR.charAt(cd));
 				}
+				++i;
 			}
-			return gesture;
+			return gesture.join('');
 		},
 
 		start: function (context) {
 			// Init
-			context = context || document.body;
+			context = context || document.body
 			this._context = context;
 			this._points = [];
 			// Handle events
@@ -117,7 +123,7 @@
 				};
 			}
 			gesture = this.gesture(this._points);
-			try { delete this._points } catch(e) {}
+			try { delete this._points } catch(e) {} // Hack, try to *realy delete* big array of points
 			this._points = null;
 			this._context = null;
 			return gesture;
