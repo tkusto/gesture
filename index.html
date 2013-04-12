@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>JavaScript Gestures library</title>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" href="css/style.css"/>
+	<script type="text/javascript" src="../src/gesture.js"></script>
+	<script type="text/javascript" src="../src/store.js"></script>
+	<script type="text/javascript" src="js/hash-router.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+</head>
+
+<body>
+	<canvas id="hotspot" width="400" height="400"></canvas>
+	<div id="menu">
+		<a href="#!pages/aboutit.html">About it</a>
+		<a href="#!pages/test.html">Test</a>
+		<a href="#!pages/library.html">Library</a>
+		<a href="#!pages/aboutme.html">About me</a>
+	</div>
+	<img id="label" src="img/label.png"/>
+	<!-- Scripts -->
+	<script type="text/javascript">
+	jQuery.noConflict();
+
+	function center(el) {
+		el.style.position = 'absolute';
+		el.style.margin = '0';
+		el.style.padding = '0';
+		el.style.left = (window.innerWidth - el.offsetWidth) / 2 + 'px';
+		el.style.top = (window.innerHeight - el.offsetHeight) / 2 + 'px';
+	}
+
+	var gesture;
+
+	$('hotspot')[0].onmousedown = function (e) {
+		var cnv = this,
+			c = this.getContext('2d'),
+			shift_x = this.offsetLeft,
+			shift_y = this.offsetTop,
+			mouse_x, mouse_y;
+		e = e || window.event;
+		mouse_x = e.clientX - shift_x;
+		mouse_y = e.clientY - shift_y;
+		c.strokeStyle = '#a50';
+		c.lineWidth = 15;
+		c.lineCap = 'round';
+		this.onmousemove = function (e) {
+			e = e || window.event;
+			c.beginPath();
+			c.moveTo(mouse_x, mouse_y);
+			mouse_x = e.clientX - shift_x;
+			mouse_y = e.clientY - shift_y;
+			c.lineTo(mouse_x, mouse_y);
+			c.stroke();
+		};
+		Gesture.recorder.start();
+	};
+
+	center($('hotspot')[0]);
+
+	$('hotspot')[0].onmouseup = $('hotspot')[0].onmouseout = function() {
+		var c = this.getContext('2d');
+		this.onmousemove = undefined;
+		c.clearRect(0, 0, this.offsetWidth, this.offsetHeight);
+		gesture = Gesture.recorder.stop();
+		Gesture.store.detect(gesture);
+	};
+
+	Gesture.store.on('A', function() {alert('Just A')});
+	Gesture.store.on('S', function() {alert('Superman!')});
+	Gesture.store.on('P', function() {alert('P is Pretty')});
+	Gesture.store.on('right', function() {
+		$('hotspot')[0].width += 20;
+		$('hotspot')[0].height += 20;
+	});
+	Gesture.store.on('left', function() {
+		$('hotspot')[0].width -= 20;
+		$('hotspot')[0].height -= 20;
+	});
+	</script>
+</body>
+
+</html>
