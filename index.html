@@ -34,7 +34,7 @@
 
 	var gesture;
 
-	$('hotspot')[0].onmousedown = function (e) {
+	$('#hotspot')[0].onmousedown = function (e) {
 		var cnv = this,
 			c = this.getContext('2d'),
 			shift_x = this.offsetLeft,
@@ -58,9 +58,9 @@
 		Gesture.recorder.start();
 	};
 
-	center($('hotspot')[0]);
+	center($('#hotspot')[0]);
 
-	$('hotspot')[0].onmouseup = $('hotspot')[0].onmouseout = function() {
+	$('#hotspot')[0].onmouseup = $('#hotspot')[0].onmouseout = function() {
 		var c = this.getContext('2d');
 		this.onmousemove = undefined;
 		c.clearRect(0, 0, this.offsetWidth, this.offsetHeight);
@@ -72,12 +72,12 @@
 	Gesture.store.on('S', function() {alert('Superman!')});
 	Gesture.store.on('P', function() {alert('P is Pretty')});
 	Gesture.store.on('right', function() {
-		$('hotspot')[0].width += 20;
-		$('hotspot')[0].height += 20;
+		$('#hotspot')[0].width += 20;
+		$('#hotspot')[0].height += 20;
 	});
 	Gesture.store.on('left', function() {
-		$('hotspot')[0].width -= 20;
-		$('hotspot')[0].height -= 20;
+		$('#hotspot')[0].width -= 20;
+		$('#hotspot')[0].height -= 20;
 	});
 	</script>
 </body>
