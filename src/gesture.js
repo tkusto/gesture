@@ -1,6 +1,6 @@
 (function () {
 
-	//'use strict';
+	'use strict';
 
 	// Constansts
 	var DIR_E  = '\u2192',
